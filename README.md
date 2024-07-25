@@ -65,7 +65,7 @@ To run the tests, use the following command:
 go test ./...
 ```
 Or to run specific test, use the following command:
-go test -v -run [testfunction]  
+`go test -v -run [testfunction]`  
 Example: 
 ```sh
 go test -v -run TestRegisterUser
