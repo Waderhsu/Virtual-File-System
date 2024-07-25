@@ -56,7 +56,7 @@ In addition to basic unit testing, I employed advanced testing techniques such a
 
 ### Code Coverage
 
-I aimed for 90% code coverage to ensure that most of our code is tested. We used the `go test -cover` tool to measure and report code coverage.
+I aimed for 75% code coverage to ensure that most of our code is tested. I used the `go test -cover` tool to measure and report code coverage.
 
 ### Running Tests
 
@@ -65,7 +65,7 @@ To run the tests, use the following command:
 go test ./...
 ```
 Or to run specific test, use the following command:
-go test -v -run [testfunction]
+go test -v -run [testfunction]  
 Example: 
 ```sh
 go test -v -run TestRegisterUser
