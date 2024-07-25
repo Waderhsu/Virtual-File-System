@@ -41,7 +41,7 @@ for Usernames, Folder Names, and File Names
 
 ### Unit Testing
 
-This project includes a comprehensive set of unit tests to ensure code quality and correctness. We aimed for high code coverage and included tests for both positive and negative scenarios.
+This project includes a comprehensive set of unit tests to ensure code quality and correctness. I aimed for high code coverage and included tests for both positive and negative scenarios.
 
 ### Input Validation
 
@@ -53,6 +53,7 @@ In addition to basic unit testing, I employed advanced testing techniques such a
 - **Mocking**: To isolate units of code and test them independently.
 - **Error Handling Tests**: To ensure the program recovers gracefully from unexpected inputs and states.
 - **Table-Driven Tests**: To efficiently cover multiple test scenarios in a compact form.
+- **Edge Case Testing**: To ensures the program can handle unusual but possible inputs.
 
 ### Code Coverage
 
