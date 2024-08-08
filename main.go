@@ -6,11 +6,20 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	// "virtualFileSystem/fileops"
 )
 
 var validNamePattern = regexp.MustCompile(`^[a-zA-Z0-9_-]{1,30}$`)
 
+// FileOperations defines methods for file operations.
+type FileOperations interface {
+	createFile(username, foldername, filename, description string) error
+	deleteFile(username, foldername, filename string) error
+}
+var fileOps FileOperations
+
 func main() {
+	fileOps = &RealFileOperations{}  
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Print("# ")
@@ -117,14 +126,25 @@ func handleCommand(command string) {
 		if len(parts) > 4 {
 			description = strings.Join(parts[4:], " ")
 		}
-		createFile(parts[1], parts[2], parts[3], description)
+
+		// createFile(parts[1], parts[2], parts[3], description)
+		// fileOps.On("createFile", parts[1], parts[2], parts[3], description).Return(nil)
+		fileOps.createFile(parts[1], parts[2], parts[3], description)
+		// if err != nil {
+		// 	fmt.Fprintln(os.Stderr, "Error:", err)
+		// }
 
 	case "delete-file":
 		if len(parts) != 4 {
 			fmt.Fprintln(os.Stderr, "Usage: delete-file [username] [foldername] [filename]")
 			return
 		}
-		deleteFile(parts[1], parts[2], parts[3])
+
+		// deleteFile(parts[1], parts[2], parts[3])
+		err := fileOps.deleteFile(parts[1], parts[2], parts[3])
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Error:", err)
+		}
 
 	case "list-files":
 		if len(parts) < 3 || len(parts) > 5 {

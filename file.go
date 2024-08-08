@@ -14,25 +14,28 @@ type File struct {
 	CreatedAt   time.Time
 }
 
+// RealFileOperations implements the FileOperations interface.
+type RealFileOperations struct{}
+
 // create a new file in [username]/[foldername]
-func createFile(username, foldername, filename, description string) {
+func (r *RealFileOperations) createFile(username, foldername, filename, description string) error {
 	// check whether the user exist
 	user, exists := users[strings.ToLower(username)]	// case insensitive
 	if !exists {
 		fmt.Fprintln(os.Stderr, "Error: The", username, "doesn't exist.")
-		return
+		return fmt.Errorf("username %s doesn't exist", username)
 	}
 	// check whether the folder exist
 	folder, exists := user.Folders[strings.ToLower(foldername)]	// case insensitive
 	if !exists {
 		fmt.Fprintln(os.Stderr, "Error: The", foldername, "doesn't exist.")
-		return
+		return fmt.Errorf("foldername %s doesn't exist", foldername)
 	}
 	// check whether the file exist
 	filename = strings.ToLower(filename) // case insensitive
 	if _, exists := folder.Files[filename]; exists {
 		fmt.Fprintln(os.Stderr, "Error: The", filename, "has already existed.")
-		return
+		return fmt.Errorf("filename %s has already existed", filename)
 	}
 	folder.Files[filename] = &File{
 		Name:        filename,
@@ -40,31 +43,33 @@ func createFile(username, foldername, filename, description string) {
 		CreatedAt:   time.Now(),
 	}
 	fmt.Printf("Create %s in %s/%s successfully.\n", filename, username, foldername)
+	return nil
 }
 
-func deleteFile(username, foldername, filename string) {
+func (r *RealFileOperations) deleteFile(username, foldername, filename string) error {
 	// check whether the user exist
 	user, exists := users[strings.ToLower(username)] // case insensitive
 	if !exists {
-		fmt.Fprintln(os.Stderr, "Error: The", username, "doesn't exist.")
-		return
+		// fmt.Fprintln(os.Stderr, "Error: The", username, "doesn't exist.")
+		return fmt.Errorf("the %s doesn't exist", username)
 	}
 	// check whether the folder exist
 	folder, exists := user.Folders[strings.ToLower(foldername)] // case insensitive
 	if !exists {
-		fmt.Fprintln(os.Stderr, "Error: The", foldername, "doesn't exist.")
-		return
+		// fmt.Fprintln(os.Stderr, "Error: The", foldername, "doesn't exist.")
+		return fmt.Errorf("the %s doesn't exist", foldername)
 	}
 	// check whether the file exist
 	filename = strings.ToLower(filename)
 	if _, exists := folder.Files[filename]; !exists {
-		fmt.Fprintln(os.Stderr, "Error: The", filename, "doesn't exist.")
-		return
+		// fmt.Fprintln(os.Stderr, "Error: The", filename, "doesn't exist.")
+		return fmt.Errorf("the %s doesn't exist", filename)
 	}
 
 	// delete the file
 	delete(folder.Files, filename)
 	fmt.Printf("Delete %s successfully.\n", filename)
+	return nil
 }
 
 func listFiles(username, foldername, sortBy, order string) {

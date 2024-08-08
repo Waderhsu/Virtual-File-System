@@ -95,10 +95,12 @@ func TestRenameFolder(t *testing.T) {
 
 // Test create file command
 func TestCreateFile(t *testing.T) {
+	fileOps = &RealFileOperations{}
+
 	users = make(map[string]*User) // Reset state for the test
 	registerUser("testuser")
 	createFolder("testuser", "testfolder", "description")
-	createFile("testuser", "testfolder", "testfile", "description")
+	fileOps.createFile("testuser", "testfolder", "testfile", "description")
 	user := users["testuser"]
 	folder := user.Folders["testfolder"]
 	if _, exists := folder.Files["testfile"]; !exists {
@@ -106,13 +108,13 @@ func TestCreateFile(t *testing.T) {
 	}
 
 	// test wrong user name
-	createFile("testuser1", "testfolder", "testfile", "description")
+	fileOps.createFile("testuser1", "testfolder", "testfile", "description")
 	if _, exists := folder.Files["testfile1"]; exists {
 		t.Errorf("cannot create the file because there is no user 'testuser1'")
 	}
 
 	// test wrong folder name
-	createFile("testuser", "testfolder1", "testfile1", "description")
+	fileOps.createFile("testuser", "testfolder1", "testfile1", "description")
 	if _, exists := folder.Files["testfile1"]; exists {
 		t.Errorf("cannot create the file because there is no folder 'testfolder1'")
 	}
@@ -120,33 +122,35 @@ func TestCreateFile(t *testing.T) {
 
 // Test delete file command
 func TestDeleteFile(t *testing.T) {
+	fileOps = &RealFileOperations{}
+
 	users = make(map[string]*User) // Reset state for the test
 	registerUser("testuser")
 	createFolder("testuser", "testfolder", "description")
-	createFile("testuser", "testfolder", "testfile", "description")
+	fileOps.createFile("testuser", "testfolder", "testfile", "description")
 	user := users["testuser"]
 	folder := user.Folders["testfolder"]
 
 	// test wrong user name
-	deleteFile("testuser1", "testfolder", "testfile")
+	fileOps.deleteFile("testuser1", "testfolder", "testfile")
 	if _, exists := folder.Files["testfile"]; !exists {
 		t.Errorf("cannot delete the file because there is no user 'testuser1'")
 	}
 
 	// test wrong folder name
-	deleteFile("testuser", "testfolder1", "testfile")
+	fileOps.deleteFile("testuser", "testfolder1", "testfile")
 	if _, exists := folder.Files["testfile"]; !exists {
 		t.Errorf("cannot delete the file because there is no folder 'testfolder1'")
 	}
 
 	// test wrong file name
-	deleteFile("testuser", "testfolder", "testfile1")
+	fileOps.deleteFile("testuser", "testfolder", "testfile1")
 	if _, exists := folder.Files["testfile"]; !exists {
 		t.Errorf("cannot delete the file because there is no file 'testfile1'")
 	}
 
 	// delete the file
-	deleteFile("testuser", "testfolder", "testfile")
+	fileOps.deleteFile("testuser", "testfolder", "testfile")
 	if _, exists := folder.Files["testfile"]; exists {
 		t.Errorf("Expected file 'testfile' to be deleted.")
 	}
@@ -154,6 +158,8 @@ func TestDeleteFile(t *testing.T) {
 
 // Test case insensitive
 func TestCaseInsensitive(t *testing.T) {
+	fileOps = &RealFileOperations{}
+	
 	// Table-Driven Tests
 	tests := []struct {
 		input string
@@ -295,7 +301,7 @@ func TestFolderCommand(t *testing.T) {
 	}
 }
 
-// Test the folder command(create, length and invalid char)
+// Test the file command(create, length and invalid char)
 func TestFileCommand(t *testing.T) {
 	users = make(map[string]*User) // Reset state for the test
 	handleCommand("register user1")

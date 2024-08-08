@@ -14,6 +14,10 @@ This project implements a virtual file system using GoLang with REPL capabilitie
 Run the following command to start the REPL:
 
 ```sh
+go run .
+```
+or
+```sh
 go run main.go user.go folder.go file.go
 ```
 
@@ -50,7 +54,7 @@ I have implemented input validation to ensure that usernames, folder names, and 
 ### Advanced Testing Techniques
 
 In addition to basic unit testing, I employed advanced testing techniques such as:
-- **Mocking**: To isolate units of code and test them independently.
+- **Mocking**: Used to isolate units of code and test them independently, particularly focusing on interactions with the file operations (mock_file_operations.go & file_operations_test.go).
 - **Error Handling Tests**: To ensure the program recovers gracefully from unexpected inputs and states.
 - **Table-Driven Tests**: To efficiently cover multiple test scenarios in a compact form.
 - **Edge Case Testing**: To ensures the program can handle unusual but possible inputs.
